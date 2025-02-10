@@ -66,10 +66,11 @@ def main(args):
 
     """4. load ckpt"""
     print("=> loading checkpoint '{}'".format(ckpt_file))
+    print(cfg['devices'])
     # load ckpt, reset epoch / best rmse
     checkpoint = torch.load(
         ckpt_file,
-        map_location = lambda storage, loc: storage.cuda(cfg['devices'][0])
+        map_location = lambda storage, loc: storage.cuda(int(cfg['devices'][0].split(':')[-1]))
     )
     # load ema model instead
     print("Loading from EMA model ...")
