@@ -1,0 +1,7 @@
+torch==1.11.0
+tensorboard
+numpy>=1.11,<1.24
+pyyaml
+pandas
+h5py
+joblib
