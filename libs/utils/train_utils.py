@@ -387,6 +387,7 @@ def valid_one_epoch(
     start = time.time()
     for iter_idx, video_list in enumerate(val_loader, 0):
         # forward the model (wo. grad)
+        # print(video_list)
         with torch.no_grad():
             output = model(video_list)
 
@@ -402,6 +403,8 @@ def valid_one_epoch(
                     results['t-end'].append(output[vid_idx]['segments'][:, 1])
                     results['label'].append(output[vid_idx]['labels'])
                     results['score'].append(output[vid_idx]['scores'])
+
+                    print(output[vid_idx]['video_id'], output[vid_idx]['segments'])
 
         # printing
         if (iter_idx != 0) and iter_idx % (print_freq) == 0:
