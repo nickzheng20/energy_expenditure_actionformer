@@ -114,7 +114,7 @@ def main(args):
     #             {
     #                 "label": "CricketBowling",
     output = {
-        "version": f"{args.output_file.split('.')[0]}",
+        "version": f"EnergyExpenditure-30fps",
         "database": {}
     }
     # video_key_counter = 1
@@ -136,7 +136,7 @@ def main(args):
         video_key = video_name  # change to video_key_counter mode?
 
         video_info = {
-            "subset": "Test",     # TODO: Implement validation test set split
+            "subset": args.subset,
             "duration": duration,
             "fps": fps,
             "annotations": ann_list
@@ -152,6 +152,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = parser.ArgumentParser()
+    parser.add_argument('-s', '--subset', type=str, required=True, help='Subset name (e.g., Train, Test, Validation)')
     parser.add_argument('-f', '--annotations_folder', type=str, default='data/video_test')
     parser.add_argument('-o', '--output_file', type=str, default='videos_data.json')
     args = parser.parse_args()

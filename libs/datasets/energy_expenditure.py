@@ -60,13 +60,15 @@ class EnergyExpenditureDataset(Dataset):
 
         # load database and select the subset
         dict_db, label_dict = self._load_json_db(self.json_file)
+        # print(f"Number of samples in dict_db: {len(dict_db)}")
+        # print(f"dict_db:{label_dict}")
         assert len(label_dict) == num_classes
         self.data_list = dict_db
         self.label_dict = label_dict
 
         # dataset specific attributes
         self.db_attributes = {
-            'dataset_name': 'thumos-14',
+            'dataset_name': 'energy_expenditure-14',
             'tiou_thresholds': np.linspace(0.3, 0.7, 5),
             # we will mask out cliff diving
             'empty_label_ids': [],
@@ -93,11 +95,13 @@ class EnergyExpenditureDataset(Dataset):
         for key, value in json_db.items():
             # skip the video if not in the split
             if value['subset'].lower() not in self.split:
+                # print(f"Skipping video {key} as it is not in the split {self.split}")
                 continue
             # or does not have the feature file
             feat_file = os.path.join(self.feat_folder,
                                      self.file_prefix + key + self.file_ext)
             if not os.path.exists(feat_file):
+                print(f"Skipping video {key} as it does not have the feature file at {feat_file}")
                 continue
 
             # get fps if available
