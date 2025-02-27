@@ -1,3 +1,15 @@
+# Energy Expenditure Project
+## Introduction
+This (temporary) repo is a part of energy expenditure project, which focuses on extracting the time zones of actions from the videos.
+
+## Training
+See the **installation** section below. 
+
+Prepare the data, then run
+```shell
+python ./train.py ./configs/energy_expenditure_i3d.yaml --output reproduce
+```
+
 # ActionFormer: Localizing Moments of Actions with Transformers
 
 ## Introduction

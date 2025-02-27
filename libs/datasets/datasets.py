@@ -5,6 +5,7 @@ from .data_utils import trivial_batch_collator, worker_init_reset_seed
 datasets = {}
 def register_dataset(name):
    def decorator(cls):
+       print(f"registering dataset {name}")
        datasets[name] = cls
        return cls
    return decorator
@@ -13,6 +14,7 @@ def make_dataset(name, is_training, split, **kwargs):
    """
        A simple dataset builder
    """
+   print(datasets.keys())
    dataset = datasets[name](is_training, split, **kwargs)
    return dataset
 
@@ -20,6 +22,7 @@ def make_data_loader(dataset, is_training, generator, batch_size, num_workers):
     """
         A simple dataloder builder
     """
+    # print(f"Number of samples in dataset: {len(dataset)}")
     loader = torch.utils.data.DataLoader(
         dataset,
         batch_size=batch_size,
