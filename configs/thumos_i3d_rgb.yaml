@@ -1,13 +1,13 @@
-dataset_name: energy_expenditure
-train_split: ['train']
-val_split: ['validation']
+dataset_name: thumos
+train_split: ['validation']
+val_split: ['test']
 dataset: {
-  json_file: ./data/lifting_dataset/videos_data.json,
-  feat_folder: ./data/lifting_dataset/concat_i3d,
+  json_file: ./data/thumos_rgb/annotations/thumos14.json,
+  feat_folder: ./data/thumos_rgb/i3d_nick_concat_features,
   file_prefix: ~,
   file_ext: .npy,
-  num_classes: 4,
-  input_dim: 2048, # 2048?
+  num_classes: 20,
+  input_dim: 2048,
   feat_stride: 4,
   num_frames: 16,
   # serve as data augmentation

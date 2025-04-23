@@ -149,8 +149,13 @@ class THUMOS14Dataset(Dataset):
         # load features
         filename = os.path.join(self.feat_folder,
                                 self.file_prefix + video_item['id'] + self.file_ext)
-        feats = np.load(filename).astype(np.float32)
-
+        # print(f"loading {filename}")
+        if filename.endswith('.pt'):
+            feats = torch.load(filename).numpy().astype(np.float32)
+        else:
+            feats = np.load(filename).astype(np.float32)
+        # feats = np.load(filename).astype(np.float32)
+        # print(f"shape: {feats.shape}")
         # deal with downsampling (= increased feat stride)
         feats = feats[::self.downsample_rate, :]
         feat_stride = self.feat_stride * self.downsample_rate

@@ -620,6 +620,7 @@ class PtTransformer(nn.Module):
         ):
             # gather per-video outputs
             cls_logits_per_vid = [x[idx] for x in out_cls_logits]
+            # print(f"cls_logits_per_vid: {cls_logits_per_vid}")
             offsets_per_vid = [x[idx] for x in out_offsets]
             fpn_masks_per_vid = [x[idx] for x in fpn_masks]
             # inference on a single video (should always be the case)
@@ -634,10 +635,11 @@ class PtTransformer(nn.Module):
             results_per_vid['feat_stride'] = stride
             results_per_vid['feat_num_frames'] = nframes
             results.append(results_per_vid)
+    
 
         # step 3: postprocssing
         results = self.postprocessing(results)
-
+        # print(results)
         return results
 
     @torch.no_grad()

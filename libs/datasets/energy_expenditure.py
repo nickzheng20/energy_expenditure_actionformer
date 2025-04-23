@@ -62,6 +62,7 @@ class EnergyExpenditureDataset(Dataset):
         dict_db, label_dict = self._load_json_db(self.json_file)
         # print(f"Number of samples in dict_db: {len(dict_db)}")
         # print(f"dict_db:{label_dict}")
+        # print(dict_db)
         assert len(label_dict) == num_classes
         self.data_list = dict_db
         self.label_dict = label_dict
@@ -69,7 +70,7 @@ class EnergyExpenditureDataset(Dataset):
         # dataset specific attributes
         self.db_attributes = {
             'dataset_name': 'energy_expenditure-14',
-            'tiou_thresholds': np.linspace(0.3, 0.7, 5),
+            'tiou_thresholds': np.linspace(0.1, 0.7, 5),
             # we will mask out cliff diving
             'empty_label_ids': [],
         }

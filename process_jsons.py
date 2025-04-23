@@ -68,29 +68,45 @@ def parse_annotation_file(json_file):
     return annotations
 
 def main(args):
-    annotations_folder = args.annotations_folder 
+    annotations_folder_root = args.annotations_folder 
 
     video_annotations = {}
 
     label_to_id = {"Lifting": 0, "Carrying": 1, "Walking": 2, "Pushing": 3}
     next_label_id = 4
+    
+    subsets = ["train", "test", "validation"]
+
+    video_set = {}
 
     # scan all json files in the folder
-    for file in os.listdir(annotations_folder):
-        if file.lower().endswith(".json"):
-            json_file = os.path.join(annotations_folder, file)
-            ann_list = parse_annotation_file(json_file)
-            for video_name, ann in ann_list:
-                if video_name not in video_annotations:
-                    video_annotations[video_name] = []
-                # assign label id
-                label = ann["label"]
-                if label not in label_to_id:
-                    print(f"new label: {label}, assigning id: {next_label_id}")
-                    label_to_id[label] = next_label_id
-                    next_label_id += 1
-                ann["label_id"] = label_to_id[label]
-                video_annotations[video_name].append(ann)
+    for subset in subsets:
+        annotations_folder = os.path.join(annotations_folder_root, subset)
+        if not os.path.exists(annotations_folder):
+            print(f"Subset folder does not exist: {annotations_folder}")
+            continue
+        print(f"Processing subset: {subset} at {annotations_folder}")
+
+        for file in os.listdir(annotations_folder):
+            if file.lower().endswith(".json"):
+                json_file = os.path.join(annotations_folder, file)
+                ann_list = parse_annotation_file(json_file)
+                for video_name, ann in ann_list:
+                    if video_name not in video_set:
+                        video_set[video_name] = subset
+                        
+
+                    if video_name not in video_annotations:
+                        video_annotations[video_name] = []
+                    # assign label id
+                    label = ann["label"]
+                    if label not in label_to_id:
+                        print(f"new label: {label}, assigning id: {next_label_id}")
+                        label_to_id[label] = next_label_id
+                        next_label_id += 1
+                    ann["label_id"] = label_to_id[label]
+                    video_annotations[video_name].append(ann)
+                    
 
     # "version": "Thumos14-30fps",
     # "database": {
@@ -120,6 +136,7 @@ def main(args):
     # video_key_counter = 1
     for video_name, ann_list in video_annotations.items():
         # get video fps and duration
+        annotations_folder = os.path.join(annotations_folder_root, video_set[video_name])
         video_path = os.path.join(annotations_folder, f"{video_name}.mp4")
         fps, duration = get_video_fps_and_duration(video_path)
         if fps is None:
@@ -136,7 +153,7 @@ def main(args):
         video_key = video_name  # change to video_key_counter mode?
 
         video_info = {
-            "subset": args.subset,
+            "subset": video_set[video_name],
             "duration": duration,
             "fps": fps,
             "annotations": ann_list
@@ -152,7 +169,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = parser.ArgumentParser()
-    parser.add_argument('-s', '--subset', type=str, required=True, help='Subset name (e.g., Train, Test, Validation)')
+    # parser.add_argument('-s', '--subset', type=str, required=True, help='Subset name (e.g., train, test, validation)')
     parser.add_argument('-f', '--annotations_folder', type=str, default='data/video_test')
     parser.add_argument('-o', '--output_file', type=str, default='videos_data.json')
     args = parser.parse_args()
